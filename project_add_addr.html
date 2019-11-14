@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="__MOBILE__/css/project/project_add_addr.css">
+  <title>新增地址</title>
+</head>
+<body>
+   <div class="add">
+       <input type="hidden" name="id" id="id" value="{$address['id']}" />
+     <div class="recive">
+       <p>收货人</p>
+       <input type="text" id="name" value="{$address['consignee']}" placeholder="请输入收货人名字" maxlength="7">
+     </div>
+     <div class="line"></div>
+     <div class="connect">
+      <p>联系电话</p>
+      <input type="text" id="phone" name="phone" value="{$address['phone']}"  onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" placeholder="请输入11位电话号码" maxlength="11">
+    </div>
+    <div class="line"></div>
+    <div class="recive">
+      <p>所在地区</p>
+        <input type="text" id="region" name="region" value="{$address['region']}" placeholder="请输入所在地区" />
+      <!--<div class="local"></div>-->
+      <!--<div class="region_img">-->
+        <!--<img src="__MOBILE__/img/project/资源 6@2x@2x.png" alt="">-->
+        <!--<span>定位</span>-->
+      <!--</div>-->
+    </div>
+    <div class="line"></div>
+    <textarea id="txt" cols="30" rows="10" placeholder="请详细填写街道、小区、门牌号" maxlength="150">{$address['address']}</textarea>
+   </div>
+   <div class="add_addr">
+    <a href="#">保存</a>
+  </div>
+</body>
+<script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+<script src="__MOBILE__/js/layer.js"></script>
+<script src="__MOBILE__/layui/layui.js"></script>
+<script src="__MOBILE__/js/hint.js"></script>
+{include file="public/fan" /}
+
+<script type="text/javascript">
+    layui.use(['layer'],function () {
+        var layer = layui.layer;
+        $(".add_addr").click(function () {
+            var id = $("#id").val();
+            var consignee = $("#name").val();
+            var phone = $("#phone").val();
+            var region = $("#region").val();
+            var address = $("#txt").val();
+            if(consignee == ""){
+                hint('收件人必须',1000);
+                return false;
+            }
+            if(phone == ""){
+                hint('联系电话必须',1000);
+                return false;
+            }else{
+                var pattern = /0?(13|14|15|17|18|19)[0-9]{9}/;
+                if(!pattern.test(phone)){
+                    hint('请输入正确手机号',1000);
+                    return false;
+                }
+            }
+            if(region == ""){
+                hint('所在地区必须',1000);
+                return false;
+            }
+            if(address == ""){
+                hint('详细地址必须',1000);
+                return false;
+            }
+            $.post('{:url("project/addAddress")}',{id:id,consignee:consignee,phone:phone,region:region,address:address},function (data) {
+                if(data.code == "1"){
+                    hint('添加成功',1000,function () {
+                        window.location.href = "address?project_id={$project_id}";
+                    });
+                }else{
+                    hint(data.message,1000);
+                }
+            },'json');
+        });
+    });
+</script>
+</html>

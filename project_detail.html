@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="detail.css">
+  <link rel="stylesheet" href="./swiper.min.css">
+  <script src="swiper.min.js"></script>
+  <script src="vue.min.js"></script>
+  <title>项目详情</title>
+</head>
+<body>
+<div class="vueObj">
+<div class="swiper-container" id="swiperBanner">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide" v-for="(item,index) in bannerList" :key="index">
+      <img :src="item.src">
+    </div>
+  </div>
+  <div class="swiper-pagination"></div>
+</div>
+<div class="detailItem">
+  <p class="detailTitle">文章标题标题文章标题标题文章标题标题文章标题标题</p>
+  <div>
+    <img src="./location.png" alt="项目所在地">
+    <span>重庆</span>
+  </div>
+</div>
+<div class="detailItem">
+  <p>￥1000.00 <span class="textColor">原价:3000.00</span></p>
+  <p>最低价：￥900.00</p>
+</div>
+<div class="detailItem">
+  <p>已售：100 <span class="color">剩余：12</span></p>
+  <p class="color">我的名片</p>
+</div>
+  <div class="detailContent">
+<ul class="detailList">
+   <li @click="index=1" :class="{active:index==1}">商品详情</li>
+   <li @click="index=2" :class="{active:index==2}">公司简介</li>
+   <li @click="index=3" :class="{active:index==3}">项目评价</li>
+</ul>
+</div >
+  <div v-if="index===1">
+  <div  class="listClass" >商品详情</div>
+  <div class="detailCon"v-html="detail"></div>
+  </div>
+  <div v-if="index===2">
+    <div  class="listClass" >公司简介</div>
+    <div class="detailCon"v-html="detail"></div>
+  </div>
+  <div v-if="index===3">
+    <div  class="listClass">产品评论</div>
+    <div class="listWrap">
+       <ul class="listT">
+         <li @click="code=0">全部评论(1000)</li>
+         <li @click="code=1">满意(750)</li>
+         <li @click="code=2">不满意(250)</li>
+       </ul>
+       <ul class="commentList">
+         <li>
+           <img src="banner.jpg">
+           <div>
+             <p><span>昵称三十四年</span><span>2019.04.04</span></p>
+             <article>还阔以哦，有用处还阔以哦，有用处还阔以哦有用处还阔以哦，有用处还阔以哦，</article>
+           </div>
+         </li>
+       </ul>
+    </div>
+  </div>
+</div>
+<!--立即购买-->
+<div class="cash">
+  <div class="collect">
+    <img src="./collect.png" alt="收藏">
+    收藏
+  </div>
+  <div class="cashBtn">立即购买</div>
+</div>
+<script>
+   var vm = new Vue({
+     el: '.vueObj',
+     data:{
+      index:1, //切换
+      code:0,
+      detail:"<img src=\"./banner.jpg\"><span>这是内容</span><b>这是内容</b><p>这是内容</p><p>这是内容</p><p>这是内容</p><p>这是内容</p><p>这是内容</p>",
+      bannerList:[{src:"banner.jpg",alt:"项目说明"},{src:"banner1.png",alt:"项目说明"}]
+     }
+   })
+   var mySwiper = new Swiper ('.swiper-container', {
+    direction: 'horizontal',
+    loop: true,
+    autoplay:true,
+    autoHeight: true, //高度自适应
+    pagination: {
+      el: '.swiper-pagination'
+    }
+  })
+</script>
+</body>
+</html>

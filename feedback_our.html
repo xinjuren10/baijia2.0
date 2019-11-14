@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+    <meta name = "format-detection" content = "telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>反馈消息</title>
+    <link rel="stylesheet" href="__MOBILE__/css/user/feedback.css">
+</head>
+<body>
+    <!-- 反馈内容 -->
+    <div class="text">
+             <div class="text_title">
+                    建议反馈内容
+             </div>
+             <div class="text_box">
+                    <textarea name="" id="text_content"  onkeyup="wordStatic(this);"  placeholder="请输入反馈内容" maxlength="200"></textarea>
+             </div>          
+<div class="text_counter"><span id="num">0</span>/200</div>
+    </div>
+    <!-- 图片上传 -->
+    <div class="img_box">
+            <div class="img_title">
+                <img src="__MOBILE__/img/user/img.png" alt="" class="img_img">
+                    <div class="img_txt">上传图片</div>
+             </div>
+             <div class="img_upload">
+                  <div class="img_up">
+                      <div class="up_box">
+                          <img src="__MOBILE__/img/user/add.png" alt="" class="add">
+                          <img src="" alt="" class="add_img">
+                        <input type="file" accept="image/*" class="file_input" onchange="getimg()">
+                      </div>
+                    
+                  </div>
+                  <div class="img_limit">最多可上传三张照片</div>
+             </div>
+    </div>
+    <!-- 联系电话 -->
+    <div class="phone">
+        <div class="phone_title">联系电话</div>
+        <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="input" placeholder="选填" minlength="11" maxlength="11">
+    </div>
+    <!-- 提交 -->
+    <div class="submit" onclick="submit()">反馈</div>
+</body>
+  <script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+    <script src="__MOBILE__/js/layer.js?1"></script>
+<script src="__MOBILE__/layui/layui.js?1"></script>
+    <script src="__MOBILE__/js/hint.js"></script>
+{include file="public/fan" /}
+<script>
+    function wordStatic(input) {
+        // 获取要显示已经输入字数文本框对象
+        var content = document.getElementById('num');
+        if (content && input) {
+            // 获取输入框输入内容长度并更新到界面
+            var value = input.value;
+            // 将换行符不计算为单词数
+            value = value.replace(/\n|\r/gi,"");
+            // 更新计数
+            content .innerText = value.length;
+        }
+    }
+</script>
+
+<script>
+    var layer;
+    layui.use(['layer'], function(){
+        layer = layui.layer;
+    });
+    var img_arr = [];
+    num = 0;
+    function getimg(){
+        var file = $(".img_upload .up_box .file_input").get(0).files;
+        var number = 3 - num;
+        if(file.length + num > 3){
+            hint('最多还能上传'+number+'张', 2000);
+            return false;
+        }
+        for(var i=0;i<file.length;i++){
+            var fd = new FormData();
+            fd.append("f", file[i]);
+          var index = layer.load();
+            $.ajax({
+                url: "/home/upload/upload_allimg",
+                type: "post",
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (r) {
+                    layer.close(index);
+                   // var r=eval("("+data+")");
+                    if(r.code == 1){
+                        $(".up_box").remove();
+                        img_arr.push(r.url);
+                        if(img_arr.length <= 3){
+                            $(".img_up").append('<div class="img">\
+                       <img src="'+r.url+'" >\
+                       </div>');
+                            num=img_arr.length;
+                            if(img_arr.length<3){
+                                $(".img_up").append(' <div class="up_box">\
+                          <img src="__MOBILE__/img/user/add.png" alt="" class="add">\
+                          <img src="" alt="" class="add_img">\
+                        <input type="file" accept="image/*" class="file_input" onchange="getimg()">\
+                      </div>')
+                            }
+                        }else{
+                           hint('最多上传3张图片', 2000);
+                        }
+                    }else{
+                       hint('上传失败', 2000);
+                    }
+                },
+                error: function () {
+                  layer.close(index);  
+                    hint('服务器错误', 2000);
+                }
+            });
+        }
+    }
+    function submit(){
+        var content = $("#text_content").val();
+        if(content == ""){
+            layer.msg('请输入文本内容',{icon: 5, time: 2000});
+            return false;
+        }
+          if(img_arr.length == 0){
+            layer.msg('至少上传1张图片',{icon: 5, time: 2000});
+            return false;
+        }
+      var phone=$(".input").val();
+        $.post('{:url("/home/user/feedback_our")}',{content:content,back_url:img_arr,phone:phone},function (data) {
+            if(data.code == "1"){
+                 layer.msg('发布成功',{icon: 1, time: 2000});
+              $("#text_content").val("");
+              $(".img_up").empty();
+               $(".img_up").append(' <div class="up_box">\
+                          <img src="__MOBILE__/img/user/add.png" alt="" class="add">\
+                          <img src="" alt="" class="add_img">\
+                        <input type="file" accept="image/*" class="file_input" onchange="getimg()">\
+                      </div>')
+              phone=$(".input").val('');
+            }else{
+                layer.msg('发布失败，请重新发布',{icon: 5, time: 2000});
+            }
+        },'json');
+    }
+</script>
+</html>

@@ -1,0 +1,83 @@
+*{
+    margin:0;
+    padding:0;
+}
+html {
+    -ms-text-size-adjust:100%;
+    -webkit-text-size-adjust:100%;
+}
+body{background: #fff;}
+.formItem{
+    border-bottom:1px solid rgba(217,217,217,1);
+    font-size:28px;
+    color:rgba(51,51,51,1);
+}
+.projectTitle {
+    line-height: 40px;
+    text-indent: 20px;
+}
+.projectSubmit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:80px;
+    line-height:80px;
+    text-align: center;
+    font-size:30px;
+    color:rgba(255,255,255,1);
+    margin:30px auto 0;
+}
+.projectPreview{
+    width:300px;
+    height:80px;
+    background:rgba(239,105,93,1);
+}
+.projectAudit{
+    width:450px;
+    height:80px;
+    background:rgba(114,144,255,1);
+}
+.inputItem{
+    display:flex;
+    align-items:center;
+}
+.inputItem p{
+    width:180px;
+    height:84px;
+    line-height:84px;
+    text-indent:10px;
+    font-size:26px;
+}
+::-webkit-input-placeholder {
+    font-size:26px;
+    color:#ccc;
+    line-height:84px;
+}
+.inputItem input{
+    outline:none;
+    border:none;
+    width:540px;
+    height:84px;
+    color:rgba(51,51,51,1);
+    line-height:84px;
+    background:#fff;
+    overflow: hidden;
+    font-size:26px;
+}
+.inputItem select{
+    width:210px;
+    height:34px;
+    text-align: center;
+    font-size:16px;
+}
+.projectDetail{
+    display: block;
+    width:730px;
+    line-height:36px;
+    font-size:26px;
+    margin:20px auto 0;
+    min-height:108px;
+    border:none;
+    outline:none;
+    overflow: auto;
+}

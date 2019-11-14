@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>我的</title>
+  <link rel="stylesheet" href="__MOBILE__/css/user/user_index.css?11.11">
+   <style>
+      .layui-layer-dialog{
+            width: 500px !important;
+      }
+      </style>
+</head>
+<body>
+  <div class="user_background">
+  </div>
+  <div class="user_all">
+    <div class="user_detail">
+        <div class="user_img_box">
+      <img class="user_img" src="{$headimgurl}" alt="">
+        </div>
+      <div class="detail_info">
+        <p class="user_info">{$userinfo.nickname}</p>
+          <?php if(!empty($baijia)){?>
+          <p class="comp_info"><?php echo $baijia['company']?></p>
+          <?php }else{?>
+          <p class="comp_info">未注册会员</p>
+          <?php }?>
+
+      </div>
+      <?php if(!empty($validate)){?>
+      <img class="user_logo" src="__MOBILE__/img/user/色相／饱和度 1@2x.png" alt="">
+      <?php }?>
+      <p class="user_rule" onclick="tan()">升级续费规则</p>
+    </div>
+    <div class="msg_info">
+        <div class="msg_zhuan" style="text-align: center">
+          <p>{$baijia.zhuan}</p>
+          <div>转发</div>
+        </div>
+        <div class="msg_shou" style="text-align: center">
+          <p>{$baijia.zan}</p>
+          <div>收藏</div>
+        </div>
+        <div class="msg_kan" style="text-align: center">
+          <p>{$baijia.pv}</p>
+          <div>浏览</div>
+        </div>
+    </div>
+    <div class="member_info">
+            <?php if($baijia['is_pay'] == 2){ ?>
+                <div class="jh">您的平台维护费 —<span>
+                   <script type="text/javascript">
+                        function toDecimal(x) {
+                            var f = parseFloat(x);
+                            if (isNaN(f)) {
+                                return;
+                            }
+                            f = Math.round(x*100)/100;
+                            return f;
+                        }
+                        function fomatFloat(src,pos){
+                            return Math.round(src*Math.pow(10, pos))/Math.pow(10, pos);
+                        }
+                        var s = fomatFloat({:date($baijia['taozhang_endtime']-time())/(86400)}, 1)
+                        console.log(s);
+                        if(s < 0){
+                            document.write('</span>已到期</div>');
+                        }else{
+                            document.write(s+'</span>天后到期</div>');
+                        }
+                        // document.write(s);
+                    </script>
+                <!--</span>天后到期</div>-->
+            <?php } ?>
+                <?php if($baijia['is_pay'] == 2){ ?>
+                    <?php if($baijia['time'] <= 0){ ?>
+                        <div class="jh_btn"><a href="#" onclick="window.location.href='/home/Wxpayment/bailingba_renewal'">续费</a></div>
+                    <?php }else{ ?>
+                        <?php if($baijia['fx_ser_id'] == 2){ ?>
+                        <div style="float:right;"><a href="#" style="color: red;" onclick="window.location.href='/home/Wxpayment/bailingba_renewal'">续费</a></div>
+                        <?php }else{ ?>
+                  		<div class="jh_btn"><a href="#" onclick="window.location.href='/home/Wxpayment/bailingba_renewal'">续费</a></div>
+                        <!--<div class="jh_btn"><a href="#" onclick="window.location.href='/home/Wxpayment/bailingba_up'">升级</a></div>-->
+                        <?php } ?>
+                    <?php } ?>
+                <?php }else if($baijia['is_pay'] == 1){ ?>
+                    <div class="jh">您还没有激活哦！</div>
+                    <div class="jh_btn"><a href="#" onclick="window.location.href='/home/Wxpayment/bailingba_pay'">激活</a></div>
+                <?php }else{ ?>
+                    <div class="jh">您还不是我们盟友哟！</div>
+                    <div class="jh_btn"><a href="#" onclick="window.location.href='/home/bailingba/get_sh'">加入我们</a></div>
+                <?php } ?>
+        </div>
+    </div>
+  </div>
+    
+    <div class="index">
+         <div class="index_txt">首页</div>
+         <div class="icon_box">
+             <div class="icon_item" onclick="window.location.href='/home/user/new_mycard?uid={$uid}'">
+                 <div class="icon_img">
+                     <img src="__MOBILE__/img/user/usr/card.png" alt="">
+                 </div>
+                 <div class="icon_txt">我的名片</div>
+             </div>
+             <div class="icon_item" onclick='window.location.href="{:url('user/invite')}"'>
+                    <div class="icon_img">
+                        <img src="__MOBILE__/img/user/usr/invite.png" alt="">
+                    </div>
+                    <div class="icon_txt">邀请有礼</div>
+                </div>
+                <div class="icon_item">
+                        <div class="icon_img">
+                            <img src="__MOBILE__/img/user/usr/money.png" alt="">
+                        </div>
+                        <div class="icon_txt">奖金管理</div>
+                    </div>
+                    <?php if(!empty($validate)){?>
+                    <div class="icon_item" onclick='window.location.href="{:url('user/my_wallet')}"'>
+                            <div class="icon_img">
+                                <img src="__MOBILE__/img/user/usr/buy.png" alt="">
+                            </div>
+                            <div class="icon_txt">消费钱包</div>
+                        </div>
+                        <?php }else{ ?>
+                            <div class="icon_item" >
+                                <div class="icon_img">
+                                    <img src="__MOBILE__/img/user/usr/buy.png" alt="">
+                                </div>
+                                <div class="icon_txt">消费钱包</div>
+                            </div>
+                            <?php }?>
+         </div>
+    </div>
+    <div class="index">
+            <div class="index_txt">项目</div>
+            <div class="icon_box">
+                <div class="icon_item" onclick='window.location.href="/home/project/index"'>
+                    <div class="icon_img">
+                        <img src="__MOBILE__/img/user/usr/project.png" alt="">
+                    </div>
+                    <div class="icon_txt">我的项目</div>
+                </div>
+                <div class="icon_item">
+                       <div class="icon_img" onclick='window.location.href="{:url('project/collect')}"'>
+                           <img src="__MOBILE__/img/user/usr/collect.png" alt="">
+                       </div>
+                       <div class="icon_txt">收藏商品</div>
+                   </div>
+                   <div class="icon_item" onclick='window.location.href="{:url('project/experice')}"'>
+                           <div class="icon_img">
+                               <img src="__MOBILE__/img/user/usr/experice.png" alt="">
+                           </div>
+                           <div class="icon_txt">体验项目</div>
+                       </div>
+                       <div class="icon_item">
+                               <div class="icon_img">
+                                   <img src="__MOBILE__/img/user/usr/order.png" alt="">
+                               </div>
+                               <div class="icon_txt">我的订单</div>
+                           </div>
+            </div>
+       </div>
+    <div class="index">
+            <div class="index_txt">个人</div>
+            <div class="icon_box">
+                <div class="icon_item">
+                    <div class="icon_img">
+                        <img src="__MOBILE__/img/user/usr/friends.png" alt="">
+                    </div>
+                    <div class="icon_txt" style="width: 120px;">联盟合伙人</div>
+                </div>
+                <div class="icon_item">
+                       <div class="icon_img">
+                           <img src="__MOBILE__/img/user/usr/integral.png" alt="">
+                       </div>
+                       <div class="icon_txt">我的积分</div>
+                   </div>
+                   <?php if(!empty($validate)){?>
+                   <div class="icon_item" onclick='window.location.href="{:url('user/my_article')}"'>
+                           <div class="icon_img">
+                               <img src="__MOBILE__/img/user/usr/article.png" alt="">
+                           </div>
+                           <div class="icon_txt">我的文章</div>
+                       </div>
+                       <?php }else{ ?>
+                        <div class="icon_item">
+                                <div class="icon_img">
+                                    <img src="__MOBILE__/img/user/usr/article.png" alt="">
+                                </div>
+                                <div class="icon_txt">我的文章</div>
+                            </div>
+                        <?php }?>
+                       <div class="icon_item">
+                               <div class="icon_img">
+                                   <img src="__MOBILE__/img/user/usr/active.png" alt="">
+                               </div>
+                               <div class="icon_txt">活动签到</div>
+                           </div>
+            </div>
+       </div>
+    
+      
+ <div class="user_msg_box">
+   <div class="user_msg">
+    <div class="msg_guanfang" onclick='window.location.href="{:url('user/system')}"'>
+      <img src="__MOBILE__/img/user/消息@2x.png" alt=""> 
+      <span class="msg_message">官方消息</span> 
+      <span class="msg_icon"><i class="right"></i></span>
+    </div>
+    <div class="msg_baijia">
+        <img src="__MOBILE__/img/user/图层 1@2x.png" alt=""> 
+        <span class="msg_message">百家—重庆</span> 
+        <span class="msg_icon"><i class="right"></i></span>
+    </div>
+    <div class="msg_kefu" onclick='window.location.href="{:url('user/contact')}"'>
+        <img src="__MOBILE__/img/user/矢量智能对象@2x(4).png" alt=""> 
+        <span class="msg_message">联系客服</span> 
+        <span class="msg_icon"><i class="right"></i></span>
+    </div>
+    <div class="msg_women" onclick='window.location.href="{:url('user/our')}"'>
+        <img src="__MOBILE__/img/user/矢量智能对象@2x(5).png" alt=""> 
+        <span class="msg_message">关于我们</span> 
+        <span class="msg_icon"><i class="right"></i></span>
+    </div>
+    <div class="msg_fankui" onclick='window.location.href="{:url('user/feedback_our')}"'>
+        <img src="__MOBILE__/img/user/矢量智能对象@2x(3).png" alt=""> 
+        <span class="msg_message">反馈</span> 
+        <span class="msg_icon"><i class="right"></i></span>
+    </div>
+   </div>
+</div>
+  <!-- 底部导航-->
+ <div class="bottom">
+    <div class="bottom_item" onclick='window.location.href="{:url('/')}"'>
+        <div class="item_img">
+            <img src="__MOBILE__/img/index/icon/home_no.png" alt="">
+        </div>
+        <div class="item_name ">首页</div>
+    </div>
+    <div class="bottom_item" onclick='window.location.href="{:url('project/projectIndex')}"'>
+        <div class="item_img">
+            <img src="__MOBILE__/img/index/icon/project_no.png" alt="">
+        </div>
+        <div class="item_name">发现</div>
+    </div>
+    <div class="bottom_item" onclick='window.location.href="{:url('found/index')}"'>
+        <div class="item_img">
+            <img src="__MOBILE__/img/index/icon/find_no.png" alt="">
+        </div>
+        <div class="item_name">圈子</div>
+    </div>
+    <div class="bottom_item" onclick='window.location.href="{:url('user/index')}"'>
+        <div class="item_img">
+            <img src="__MOBILE__/img/index/icon/user_yes.png" alt="">
+        </div>
+        <div class="item_name selected">我的</div>
+    </div>
+</div>
+
+  <!--规则-->
+<div class="show">
+    <div class="show_box">
+         <div class="show_content">
+             <div class="show_title">升级续费规则</div>
+             <div class="show_text">
+                 <span>  1.时间在激活15天之前，升级时优惠之前付费金额，费用只升不降</span>
+                 <span style="margin-top: 0.3rem">  2.在服务费未到期之前无法续费，只能升级，续费可按原等级费用进行续费，也可以续费更高等级的服务费。</span>
+                 <span style="margin-top: 0.3rem"> 3.到期5天后没有续费，再次续费时需以新人方式入驻，如平台有相同领域用户入驻，只能以更高的等级费用入驻，如最高等级也被其他用户占据，则不能入驻平台。</span>
+             </div>
+         </div>
+        <div class="show_close" onclick="shut()">我知道了</div>
+    </div>
+</div>
+</body>
+<script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+<script src="__MOBILE__/js/layer.js"></script>
+<script src="__MOBILE__/layui/layui.js"></script>
+    <script src="__MOBILE__/js/hint.js"></script>
+<script type="text/javascript">
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        $(".msg_baijia").click(function () {
+           hint("暂未开放",1000);
+        });
+        $(".home_icon4").click(function () {
+           hint("敬请期待",1000);
+        });
+      	
+      	$(".validate").click(function () {
+           hint("您还不是会员哦！",1000);
+        });
+      
+    });
+  function tan(){
+    var show=document.querySelector(".show");
+    show.style.display="block";
+
+}
+function shut() {
+    var show=document.querySelector(".show");
+    show.style.display="none";
+
+}
+</script>
+</html>
+  
+

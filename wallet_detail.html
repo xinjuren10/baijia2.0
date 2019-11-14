@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+    <meta name = "format-detection" content = "telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>收入记录</title>
+    <link rel="stylesheet" href="__MOBILE__/css/user/wallet_detail.css">
+</head>
+<body>
+  <div class="main">
+    <div class="main_text"> 总计收入：<span class="money">{$money}元</span>
+    </div>
+  </div>
+  <div class="record">
+    <ul class="person">
+       {volist name="share_list" id="vo"}
+          <li class="every">
+            <div class="avator">
+                <img src="__MOBILE__/img/user/wallet.png" alt="">
+            </div>
+            <div class="person_data">
+              <div class="person_name_box">
+                  <div class="person_name">
+                  入账金额
+                  </div>
+                  <div class="person_number">
+                    <div class="number">+{$vo.money}</div>       
+                  </div>
+              </div>
+              <div class="person_profess_box">
+                <div class="profess">
+                  <span><?php echo date("Y-m-d",$vo['addtime'])?></span><span>{$vo.type_share}</span>
+                </div>
+                <div class="profess_time"><?php echo date("Y-m-d H:i:s",$vo['addtime'])?></div>
+              </div>
+            </div>
+          </li>
+      {/volist}
+
+      
+      
+    </ul>
+  </div>
+  <script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+
+  {include file="public/fan" /}
+</body>
+</html>

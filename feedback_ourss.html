@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+    <meta name = "format-detection" content = "telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>反馈消息</title>
+    <link rel="stylesheet" href="__MOBILE__/css/user/feedback.css">
+    <script src="__MOBILE__/js/feed/jquery-2.0.3.min.js"></script>
+    <script src="__MOBILE__/js/layer.js?1"></script>
+    <script src="__MOBILE__/layui/layui.js?1"></script>
+    <script src="__MOBILE__/js/hint.js"></script>
+  	<script type='text/javascript' src='__MOBILE__/js/feed/base64image.js'></script>
+	<script type='text/javascript' src='__MOBILE__/js/feed/exif.js'></script>
+</head>
+<body>
+<!-- 反馈内容 -->
+<div class="text">
+    <div class="text_title">
+        建议反馈内容
+    </div>
+    <div class="text_box">
+        <textarea name="" id="text_content"  onkeyup="wordStatic(this);"  placeholder="请输入反馈内容" maxlength="200"></textarea>
+    </div>
+    <div class="text_counter"><span id="num">0</span>/200</div>
+</div>
+<!-- 图片上传 -->
+<div class="img_box">
+    <div class="img_title">
+        <img src="__MOBILE__/img/user/img.png" alt="" class="img_img">
+        <div class="img_txt">上传图片</div>
+    </div>
+    <div class="img_upload">
+        <div class="img_up">
+            <div class="up_box">
+                <img src="__MOBILE__/img/user/add.png" alt="" class="add">
+                <img src="" alt="" id='image-list' class="add_img">
+                <input type="file"  class="file_input" accept="images/jpg,images/png,images/gif" name="f" onchange="fileUp(this)" id="file-up">
+
+            </div>
+        </div>
+        <div class="img_limit">最多可上传三张照片</div>
+    </div>
+</div>
+<!-- 联系电话 -->
+<div class="phone">
+    <div class="phone_title">联系电话</div>
+    <input type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" class="input" placeholder="选填" minlength="11" maxlength="11">
+</div>
+<!-- 提交 -->
+<div class="submit" onclick="submit()">反馈</div>
+</body>
+<script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+<script src="__MOBILE__/js/layer.js?1"></script>
+<script src="__MOBILE__/layui/layui.js?1"></script>
+<script src="__MOBILE__/js/hint.js"></script>
+{include file="public/fan" /}
+<script>
+    function wordStatic(input) {
+        // 获取要显示已经输入字数文本框对象
+        var content = document.getElementById('num');
+        if (content && input) {
+            // 获取输入框输入内容长度并更新到界面
+            var value = input.value;
+            // 将换行符不计算为单词数
+            value = value.replace(/\n|\r/gi,"");
+            // 更新计数
+            content .innerText = value.length;
+        }
+    }
+</script>
+
+<script>
+    var layer;
+    layui.use(['layer'], function(){
+        layer = layui.layer;
+    });
+    var img_arr = [];
+    num = 0;
+    //base64转二进制
+    function dataURItoBlob(base64Data) {
+        var byteString;
+        if (base64Data.split(',')[0].indexOf('base64') >= 0)
+            byteString = atob(base64Data.split(',')[1]);
+        else
+            byteString = unescape(base64Data.split(',')[1]);
+        var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0];
+        var ia = new Uint8Array(byteString.length);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ia], {type:mimeString});
+    }
+    var fileUp = function (me) {
+        base64Image({
+            width: 150,                             /*【选填】宽度默认750，如果图片尺寸大于该宽度，图片将被设置为该宽度*/
+            ratio: 0.75,                            /*【选填】压缩率默认0.75 */
+            file: me,                               /*【必填】对应的上传元素 */
+            callback: function (imageUrl){         /*【必填】处理成功后的回调函数 */
+                /*imageUrl为得到的图片base64数据，这里可以进行上传到服务器或者其他逻辑操作 */
+                var img = new Image();
+                img.src = imageUrl;
+                var fd = new FormData();
+                fd.append("f", dataURItoBlob(imageUrl), 'image.png');
+                 var index = layer.load();
+                $.ajax({
+                    url: "/home/upload/upload_allimg",
+                    type: "post",
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                       success: function (r) {
+                        layer.close(index);
+                    if(r.code == 1){
+                        $(".up_box").remove();
+                        img_arr.push(r.url);
+                        if(img_arr.length <= 3){
+                            $(".img_up").append('<div class="img">\
+                       <img src="'+r.url+'" >\
+                       </div>');
+                            num=img_arr.length;
+                            if(img_arr.length<3){
+                                $(".img_up").append(' <div class="up_box">\
+                          <img src="__MOBILE__/img/user/add.png" alt="" class="add">\
+                          <img src="" alt="" class="add_img">\
+                          <input type="file"  class="file_input" name="f" onchange="fileUp(this)" id="file-up">    \
+                      </div>')
+                            }
+                        }else{
+                            hint('最多上传3张图片', 2000);
+                        }
+                    }else{
+                        hint('上传失败', 2000);
+                    }
+                },
+                    error: function () {
+                        //layer.close(index);
+                        // hint('服务器错误', 2000);
+                    }
+                })
+            }
+        })
+    }
+    function submit(){
+
+        var content = $("#text_content").val();
+        if(content == ""){
+            layer.msg('请输入文本内容',{icon: 5, time: 2000});
+            return false;
+        }
+        if(img_arr.length == 0){
+            layer.msg('至少上传1张图片',{icon: 5, time: 2000});
+            return false;
+        }
+        var phone=$(".input").val();
+        $.post('{:url("/home/user/feedback_our")}',{content:content,back_url:img_arr,phone:phone},function (data) {
+            if(data.code == "1"){
+                layer.msg('发布成功',{icon: 1, time: 2000});
+                $("#text_content").val("");
+                $(".img_up").empty();
+                $(".img_up").append(' <div class="up_box">\
+                          <img src="__MOBILE__/img/user/add.png" alt="" class="add">\
+                          <img src="" alt="" class="add_img">\
+                        <input type="file" accept="image/*" class="file_input" onchange="getimg()">\
+                      </div>')
+                phone=$(".input").val('');
+            }else{
+                layer.msg('发布失败，请重新发布',{icon: 5, time: 2000});
+            }
+        },'json');
+    }
+</script>
+</html>

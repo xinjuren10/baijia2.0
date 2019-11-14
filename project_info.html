@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="__MOBILE__/css/project/project_info.css?846465">
+  <title>项目详情</title>
+</head>
+<body>
+   <div class="pro_title">
+       <?php if(empty($info['video'])){ ?>
+       <div class="pro_img_box">
+            <img src="{$info['img']}" alt="">
+       </div>
+       <?php }else{ ?>
+       <div class="msg_detail">
+           <video  controls="controls" preload="auto" width="800px" height="245px"  autoPlay=false loop muted status="play" playsinline id="video">
+               <source src="{$info['video']}">
+           </video>
+       </div>
+       <?php } ?>
+      <div class="title">
+        <p>{$info['title']}</p><?php if($info['is_recommend'] == 1){ ?><span>推荐</span><?php } ?></div>
+      <div class="pro_position">
+        <div class="pro_local">
+        <img src="__MOBILE__/img/project/资源 6@2x@2x (1).png" alt="">
+        <span>{$info['address']}</span>
+        </div>
+        <p>{$info['category_id']}</p>
+        <p>{$info['type']}</p>
+      </div>
+   </div> 
+   <div class="pro_card">
+     <div class="card_title">
+         <div class="card_img_box">
+       <img src="{$info['headimgurl']}" alt="">
+         </div>
+       <div>{$info['nickname']}</div>
+     </div>
+     <div class="card_info">
+       <b>项目简介：</b>
+       <span>
+          {$info['introduce']}
+      </span>
+      </div>
+      <div class="card_time">
+         <div class="time_one">
+           <p>
+             ￥<span>{$return['price']}</span>/<span>1</span>份
+           </p>
+           <div>
+             <span>{$return['number']}</span>人已体验/
+             剩余<span>{$return['s_num']}</span>人
+           </div>
+         </div>
+         <div class="time_two">
+           <p> 
+             <span>{$info['focus']}</span>  已关注
+           </p>
+           <div class="remain">
+             <p>剩余时间：<span class="days"></span></p>
+           </div>
+         </div>
+      </div>
+   </div>
+   <div class="pro_des">
+     <div class="line"></div>
+     <div class="pro_all">
+       <p>项目故事</p>
+       <p>项目概况</p>
+       <p>项目回报</p>
+     </div>
+     <div class="line"></div>
+   </div>
+   <div class="user_des">
+     <div class="my_des">我的自述</div>
+     <div class="detail_des"> {$info['story']}</div>
+   </div>
+   <div class="pro_detail">
+     <p><b style="font-size:30px;">项目概况</b></p>
+     <div class="detail_name">
+       <p>项目名称</p>
+       <div>{$overview['title']}</div>
+     </div>
+     <div class="line_border"></div>
+     <div class="detail_position">
+       <p>项目位置</p>
+       <div>{$overview['location']}</div>
+     </div>
+     <div class="line_border"></div>
+     <div class="detail_special">
+       <p>项目特色</p>
+       <div>{$overview['features']}</div>
+     </div> 
+   </div>
+   <div class="pro_reward">
+     <p><b style="font-size:30px;">项目回报</b></p>
+     <div class="pro_intr">
+       <div class="intr_title">
+         <p>{$info['title']}</p>
+         <div class="bor">{$info['type']}</div>
+         <div class="intr_price">￥<span>{$return['price']}</span></div>
+       </div>
+       <!--<div class="intr_info">感谢您对【山茶灿】项目的支持！</div>-->
+       <p class="intr_content">{$return['content']}</p>
+       <div class="line"></div>
+       <div class="intr_exp">
+         <p><span>{$return['number']}</span>人已体验/剩余<span>{$return['s_num']}</span>人</p>
+         <div onclick="window.location.href='report?id={$info["id"]}&return_id={$return["id"]}&type=1'">查看详情</div>
+       </div>
+     </div>
+   </div>
+   <div class="pro_btn">
+      <div class="btn" data-id="{$info['status']}">
+          <?php if($info['status'] == 1){ ?>
+            <img src="__MOBILE__/img/project/full.png">
+          <?php }else{ ?>
+            <img src="__MOBILE__/img/project/empty.png">
+          <?php } ?>
+        <div class="collection">收藏<span class="num">{$info['collection']}</span></div>
+      </div>
+       <?php if($return['s_num'] == 0 || $info['return_time'] <= 0){ ?>
+            <p style="background: #666666" class="experience">我要体验</p>
+       <?php }else{ ?>
+       <p class="experience">我要体验</p>
+       <?php } ?>
+   </div>
+</body>
+<script src="__MOBILE__/js/jquery-1.11.3.js"></script>
+<script src="__MOBILE__/js/layer.js"></script>
+<script src="__MOBILE__/layui/layui.js"></script>
+  <script src="__MOBILE__/js/hint.js"></script>
+{include file="public/fan" /}
+
+<script type="text/javascript">
+    var date = {$info['return_time']};
+    $(function () {
+        if(date <= 0){
+            $(".remain").text("剩余时间: 0天");
+            $(".remain").css("margin-top","58px");
+            $(".remain").css("font-size","23px");
+            $(".remain").css("color","#c94438");
+            $(".remain").css("margin-right","67px");
+        }
+    });
+    layui.use(['layer'],function () {
+       var layer = layui.layer;
+        $(".btn").click(function () {
+            var type = $(this).data("id");
+            var id = {$info['id']};
+            var num = $(".num").text();
+            var status;
+            if(type == 1){
+                status = 0;
+                $(this).data('id',"0");
+                $.post('{:url("project/collection")}',{id:id,status:status},function (data){
+                    if(data.code == "1"){
+                        num--;
+                        $(".num").text(num);
+                        $(".btn img").attr("src","/home/mobile/img/project/empty.png");
+                        hint('取消收藏成功',1000);
+                    }else{
+                        hint(data.message,1000);
+                    }
+                },'json');
+            }else{
+                status = 1;
+                $(this).data('id',"1");
+                $.post('{:url("project/collection")}',{id:id,status:status},function (data){
+                    if(data.code == "1"){
+                        num++;
+                        $(".num").text(num);
+                        $(".btn img").attr("src","/home/mobile/img/project/full.png");
+                        hint('收藏成功',1000);
+                    }else{
+                        hint(data.message,1000);
+                    }
+                },'json');
+            }
+        });
+        $(".experience").click(function (){
+            var num = {$return['s_num']};
+            if(date <= 0){
+                hint('该项目体验时间已到',1000);
+                return false;
+            }
+            if(num == 0){
+                hint('该项目体验人数已达上限',1000);
+                return false;
+            }
+            window.location.href='report?id={$info["id"]}&return_id={$return["id"]}&type=2';
+        });
+    });
+    var time_num = {$return.return_time}*1000;
+    function count_down() {
+        let now = Date.now();
+        let days = Math.floor((time_num - now) / (1000 * 60 * 60 * 24));
+        //daysEle.innerHTML = days;
+        let hours = Math.floor((time_num - now) / (1000 * 60 * 60)) % 24;
+        //hoursEle.innerHTML = hours;
+        let minutes = Math.floor((time_num - now) / (1000 * 60)) % 60;
+        //minutesEle.innerHTML = minutes;
+        let seconds = Math.floor((time_num - now) / (1000)) % 60;
+        //secondsEle.innerHTML = seconds;
+        $(".days").html(days+'天'+hours+'时'+minutes+'分'+seconds+'秒');
+    }
+    count_down();
+    setInterval(count_down, 1000);
+</script>
+</html>
+<script type="text/javascript">
+
+function GetQueryString(name)
+{
+     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+     var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+     if(r!=null)return  unescape(r[2]); return null;
+}
+
+
+     var uid=GetQueryString("uid")
+  if(uid){
+        $(".person_box").css("display","block")
+        userid=uid
+    
+        $.ajax({
+        type: "POST",
+        url: "/home/index/article_share",
+        data: {uid: userid},
+        dataType: "json",
+        success: function (data) {
+            
+        },
+        error: function () {
+            
+        }
+    });
+  }
+</script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js" type="text/javascript" charset="utf-8"></script>
+<script src="__MOBILE__/js/weixinaudio.js"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config(<?php echo $js_ticket; ?>);
+
+
+    function wx_share() {
+
+        wx.ready(function () {
+            var shareData = {
+                title: '{$share_data["title"]}',
+                desc: '{$share_data["desc"]}',
+                link: '{$share_data["link"]}',
+                imgUrl: '{$share_data["imgUrl"]}',
+                type: 'link', // 分享类型,music、video或link，不填默认为link 分享给朋友
+                dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空 分享给朋友
+            };
+            wx.hideMenuItems({
+                menuList: [
+                    "menuItem:copyUrl",
+                    "menuItem:share:qq",
+                    "menuItem:share:weiboApp",
+                    "menuItem:share:QZone",
+                    "menuItem:openWithQQBrowser",
+                    "menuItem:share:email",
+                    "menuItem:share:brand",
+                    "menuItem:originPage",
+                    "menuItem:editTag",
+                    "menuItem:delete",
+                    "menuItem:openWithSafari"
+                ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+            });
+//分享给好友
+            wx.onMenuShareAppMessage({
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                type: shareData.type,
+                dataUrl: shareData.dataUrl,
+                trigger: function (res) {
+                },
+                success: function (res) {
+                  	
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                    alert(JSON.stringify(res));
+                }
+            });
+//分享给朋友圈
+            wx.onMenuShareTimeline({
+                title: shareData.title,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                type: shareData.type,
+                dataUrl: shareData.dataUrl,
+                trigger: function (res) {
+                },
+                success: function (res) {
+                },
+                cancel: function (res) {
+                },
+                fail: function (res) {
+                    alert(JSON.stringify(res));
+                }
+            });
+            //QQ
+            wx.onMenuShareQQ({
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                success: function () {
+                },
+                cancel: function () {
+
+                },
+                fail: function (res) {
+                    alert(JSON.stringify(res));
+                }
+            });
+//QQ空间
+            wx.onMenuShareQZone({
+                title: shareData.title,
+                desc: shareData.desc,
+                link: shareData.link,
+                imgUrl: shareData.imgUrl,
+                success: function () {
+                },
+                cancel: function () {
+
+                },
+                fail: function (res) {
+                    alert(JSON.stringify(res));
+                }
+            });
+
+
+        });
+    }
+    wx_share();
+</script>

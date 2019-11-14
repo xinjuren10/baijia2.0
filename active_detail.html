@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="__MOBILE__/css/new_user/active_detail.css">
+  <title>活动详情</title>
+</head>
+<body>
+  <div class="active_banner">
+    <img src="{$data.img}" alt="">
+  </div>
+  <div class="active_begin_box">
+    <div class="active_begin_detail">
+      <div class="active_begin_title">
+        <div></div>
+        <span>活动详情</span>
+      </div>
+      <div class="active_begin_content">
+        {$data.content}
+      </div>
+      <p class="active_begin_remind">注意：若您有意参加此活动，请提前半小时入场进行现场签到</p>
+    </div>
+    <div class="active_begin_time">
+        <div class="active_begin_time_title">
+          <div></div>
+          <span>活动时间</span>
+        </div>
+        <div class="active_begin_time_content">
+         <?php echo date("Y-m-d H:i",$data['starttime'])?> 至 <?php echo date("Y-m-d H:i",$data['endtime'])?>
+        </div>
+    </div>
+    <div class="active_begin_addr">
+      <div class="active_begin_addr_title">
+        <div></div>
+        <span>活动地点</span>
+      </div>
+      <div class="active_begin_addr_content">
+          {$data.address}
+      </div>
+    </div>
+    <div class="active_begin_money">
+      <div class="active_begin_money_title">
+        <div></div>
+        <span>活动费用</span>
+      </div>
+      <div class="active_begin_money_content">
+          参加此活动需交纳{$data.money}服务费用
+      </div>
+    </div>
+    <div class="active_begin_count">
+      <div class="active_begin_count_title">
+        <div></div>
+        <span>活动名额</span>
+      </div>
+      <div class="active_begin_count_content">
+         {$data.num}
+      </div>
+    </div>
+  </div>
+  <div class="active_btn" onclick="window.location.href = '/home/user/signUp?id={$data.id}'">立即报名</div>
+</body>
+</html>

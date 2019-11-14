@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=750px;initial-scale=1.0,user-scalable=no"/>
+  <meta name = "format-detection" content = "telephone=no">
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--  <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.3/weui.min.css">-->
+  <link rel="stylesheet" href="./project-add.css">
+  <title>新增砍价项目</title>
+</head>
+<body ontouchstart>
+<form action="" enctype="multipart/form-data">
+    <div class="formItem">
+        <p class="projectTitle">添加项目图片：</p>
+        <div class="img_upload">
+            <div class="img_up">
+                <div class="up_box">
+                    <img src="__MOBILE__/img/user/add.png" alt="" class="add">
+                    <img src="" alt="" id='image-list' class="add_img">
+                    <input type="file"  class="file_input" name="f" accept="image/gif, image/jpeg,image/png,image/jpg" onchange="fileUp(this)" id="file-up">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="formItem inputItem">
+        <p>商品名称：</p>
+        <input type="text" class="name">
+    </div>
+    <div class="formItem inputItem">
+        <p>商品属性：</p>
+        <select name="" id="">
+            <option value="金融">金融</option>
+            <option value="教育">教育</option>
+            <option value="金融">金融</option>
+            <option value="教育">教育</option>
+        </select>
+    </div>
+    <div class="formItem inputItem">
+        <p>商品原价：</p>
+        <input type="text" class="name">
+    </div>
+    <div class="formItem inputItem">
+        <p>商品最低价：</p>
+        <input type="text" class="name" placeholder="砍价人数达到之后的最低成交价">
+    </div>
+    <div class="formItem inputItem">
+        <p>活动起始时间：</p>
+        <input type="text" class="name" placeholder="后台审核需要1-3个工作日">
+    </div>
+    <div class="formItem inputItem">
+        <p>活动结束时间：</p>
+        <input type="text" class="name">
+    </div>
+    <div class="formItem inputItem">
+        <p>商品库存：</p>
+        <input type="text" class="name">
+    </div>
+    <div class="formItem inputItem">
+        <p>砍价人数：</p>
+        <input type="text" class="name">
+    </div>
+    <div class="formItem inputItem">
+        <p>商品属性：</p>
+        <select name="" id="orderPrice">
+            <option value="1%">1%</option>
+            <option value="5%">5%</option>
+            <option value="10%">10%</option>
+            <option value="20%">20%</option>
+        </select>
+    </div>
+    <div class="formItem">
+        <p class="projectTitle">商品详情：</p>
+        <div class="img_upload">
+            <div class="img_up">
+                <div class="up_box">
+                    <img src="__MOBILE__/img/user/add.png" alt="" class="add">
+                    <img src="" alt=""  class="add_img">
+                    <input type="file"  class="file_input" name="f" accept="image/gif, image/jpeg,image/png,image/jpg" onchange="fileUp(this)" id="file-up">
+                </div>
+            </div>
+        </div>
+    </div>
+    <textarea  class="projectDetail" placeholder="请填写商品详情"></textarea>
+    <div class="projectSubmit">
+        <div class="projectPreview">预览</div>
+        <div class="projectAudit">提交审核</div>
+    </div>
+</form>
+</body>
+</html>

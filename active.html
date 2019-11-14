@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=750px;initial-scale=1.0, maximum-scale=2.0, user-scalable=no" />
+          <meta name = "format-detection" content = "telephone=no">
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>活动</title>
+    <link rel="stylesheet" href="__MOBILE__/css/new_user/active.css">
+</head>
+<body>
+        <div class="tab_box">
+                <div class="active tab">签到活动</div>
+                 <div class="hah tab">每日打卡</div>
+            </div> 
+            <div id="info_box">
+                    <div class="info_case">
+                       <div class="active_box">
+                           <div class="title_box">
+                               <div class="title_left">标题</div>
+                               <input type="text" class="title_text" placeholder="如：召开联盟会议">
+                           </div>
+                           <div class="content_box">
+                               <textarea name="" id="text" placeholder="请描述一下您的具体内容"></textarea>
+                               <div class="img" >
+                                   <img src="__MOBILE__/img/new_user/up_img.png" alt="">
+                               </div>
+                               <div class="img_show" style="display: none;">
+                                   <img src="" alt="" class="photo">
+                                   <img src="__MOBILE__/img/new_user/del.png" class="del">
+                               </div>
+                           </div>
+                           <div class="serve_box">
+                               <div class="serve_title">服务费用<span>(可自行更改）</span></div>
+                               <span class="ic">￥</span><input type="text" class="money" placeholder="价格">
+                               
+                           </div>
+                           <div class="number_box">
+                               <div class="number_title">活动名额</div>
+                               <div class="number_list">
+                                   <div class="number_down"><div></div></div>
+                                   <div class="number">100</div>
+                                   <div class="number_up">
+                                       <img src="__MOBILE__/img/new_user/number_up.png" alt="">
+                                   </div>
+                               </div>
+                           </div>
+                           <div class="time_box">
+                               <div class="time_title">开始时间</div>
+                               <input type="text" class="start_time"  id="date" data-options="{'type':'YYYY-MM-DD hh:mm','beginYear':2019,'endYear':2088}"  placeholder="请点击选择开始时间">
+                           </div>
+                           <div class="time_box">
+                                <div class="time_title">结束时间</div>
+                                <input type="text" class="end_time"  id="date_end" data-options="{'type':'YYYY-MM-DD hh:mm','beginYear':2019,'endYear':2088}"  placeholder="请点击选择结束时间">
+                            </div>
+                            <div class="address_box">
+                                <div class="address_title">活动地点</div>
+                                <textarea name="" id="adress" class="address"  placeholder="点击输入会议地址"></textarea>
+                            </div>
+                       </div>
+                       <div class="submit">发布</div>
+                    </div>
+                    <div class="info_case">
+                        2
+                        </div>
+            </div>
+            <div class="alert_box" style="display:none">
+                <div class="close">
+                    <img src="__MOBILE__/img/new_user/close.png" alt="">
+                </div>
+                <div class="close_title">
+                        您已成功发布活动
+                    </div>
+                <div class="close_yes">查看详情</div>
+            </div>
+</body>
+<script src="__MOBILE__/js/jquery.min.js"></script>
+<script src="__MOBILE__/js/jquery.date.js"></script>
+<script src="__MOBILE__/js/hint.js"></script>
+<script>
+    	$.date('#date');
+        $.date('#date_end');
+        var item = document.querySelectorAll('.tab');
+          var active = document.querySelector(".tab");
+          var gaine = document.getElementById('info_box');
+          var base = gaine.getElementsByClassName('info_case');
+          console.log(base);
+          for (var i = 0; i <base.length; i++) {
+              item[i].index = i;
+              item[i].onclick = function () {
+                  var active = document.getElementsByClassName("tab");
+        
+                  for (var a = 0; a < active.length; a++) {
+                     active[a].classList.remove("active");
+                  }
+                 
+                 this.classList.add("active");
+                  
+                  for (var i = 0; i < base.length; i++) {
+                      base[i].style.display = "none";
+                  }
+                 base[this.index].style.display = "block";
+              };
+              for (var m = 1; m < base.length; m++) {
+                  base[m].style.display = "none";
+              }
+          }
+      </script>
+</html>
+     <script>
+        $(".submit").click(function () {
+          var title = $('.title_text').val();
+		  var img = $('.photo').val();
+          var content = $('#text').val();
+          var money = $('.money').val();
+          var num = $('.number').html();
+          var starttime = $('.start_time').val();
+          var endtime = $('.end_time').val();
+          var address = $('.address').val();
+          
+          $.ajax(
+              {
+                  type: 'POST',
+                  url: '/home/user/add_sign_up',
+                  cache: false,
+                  dataType: 'json',
+                  data: {title:title,img:img,content:content,money:money,num:num,starttime:starttime,endtime:endtime,address:address},
+                  async: false,
+                  success: function (data) {
+                      if (data.code == 1) {
+                          hint(data.message,2000,function(){
+                             window.location.href = '/home/user/sign_up_info?id='+data.data;
+                          });
+                      }
+                      else {
+                          hint(data.message);
+                      }
+                  },
+                  error: function (textStatus) {
+                     hint('网络繁忙，请稍后再试')
+                  },
+              });
+      })
+</script>
